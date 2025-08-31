@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: opencircular-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: AI_PROVIDER
+        value: gemini
+      - key: CORS_ALLOWED_ORIGINS
+        fromService:
+          type: web
+          name: opencircular-frontend
+          property: host
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+
+  - type: web
+    name: opencircular-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    healthCheckPath: /
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE
+        fromService:
+          type: web
+          name: opencircular-backend
+          property: host
