@@ -20,7 +20,6 @@ RUN pip install --no-cache-dir -e .
 # Copy source code
 COPY src/ ./src/
 COPY uvicorn_start.sh ./
-COPY tests/ ./tests/
 
 # Make startup script executable
 RUN chmod +x uvicorn_start.sh
